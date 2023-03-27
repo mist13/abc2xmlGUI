@@ -1,0 +1,96 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2023-03-23 10:41+0100\n"
+"PO-Revision-Date: 2023-03-23 10:43+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: abc2xmlGUI.py:57 abc2xmlGUI.py:83
+msgid "All files"
+msgstr ""
+
+#: abc2xmlGUI.py:61
+msgid "This program needs abc2xml and/or xml2abc from wim.vree.org to work."
+msgstr ""
+
+#: abc2xmlGUI.py:63
+msgid ""
+" INSTALLATION\n"
+" ============\n"
+"Copy abc2xml.py and/or xml2abc.py into this program's folder:\n"
+"\n"
+"{folder}\n"
+"\n"
+"Should you already have the files in a different location,\n"
+"enter their full path into the ini file in the same folder.\n"
+"\n"
+"If you are running Windows, make sure that Python is installed\n"
+"and that the path to Python is in your PATH environment variable.\n"
+"Alternatively, use abc2xml.exe and xml2abc.exe files instead."
+msgstr ""
+
+#: abc2xmlGUI.py:76
+msgid ""
+" INSTRUCTIONS\n"
+" ============\n"
+"1. Paste abc/XML or select file using button 'Open'.\n"
+"2. Change abc/XML as desired and/or select part of it.\n"
+"   Changed abc/XML can be saved using button 'Save'.\n"
+"3. Convert using button 'Convert'."
+msgstr ""
+
+#: abc2xmlGUI.py:127
+msgid "score line-break"
+msgstr ""
+
+#: abc2xmlGUI.py:171
+msgid "Open"
+msgstr ""
+
+#: abc2xmlGUI.py:172
+msgid "Save"
+msgstr ""
+
+#: abc2xmlGUI.py:173
+msgid "Convert"
+msgstr ""
+
+#: abc2xmlGUI.py:192
+msgid ""
+"This function needs abc2xml.\n"
+"Copy file into abc2xmlGUI folder\n"
+"or enter path into abc2xmlGUI.ini."
+msgstr ""
+
+#: abc2xmlGUI.py:227 abc2xmlGUI.py:281
+msgid "Select file"
+msgstr ""
+
+#: abc2xmlGUI.py:244
+msgid ""
+"Python not found!\n"
+"Please check your installation and\n"
+"environment variables."
+msgstr ""
+
+#: abc2xmlGUI.py:319
+msgid "No abc or XML to convert."
+msgstr ""
+
+#: abc2xmlGUI.py:352
+msgid ""
+"This function needs xml2abc.\n"
+"Copy file into abc2xml GUI folder\n"
+"or enter path into abc2xmlGUI.ini."
+msgstr ""

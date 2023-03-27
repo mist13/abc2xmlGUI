@@ -1,0 +1,131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2023-03-23 10:41+0100\n"
+"PO-Revision-Date: 2023-03-25 14:01+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: abc2xmlGUI.py:57 abc2xmlGUI.py:83
+msgid "All files"
+msgstr "Tous les fichiers"
+
+#: abc2xmlGUI.py:61
+msgid "This program needs abc2xml and/or xml2abc from wim.vree.org to work."
+msgstr ""
+"Ce programme a besoin de abc2xml et/ou xml2abc disponibles à wim.vree.org."
+
+#: abc2xmlGUI.py:63
+msgid ""
+" INSTALLATION\n"
+" ============\n"
+"Copy abc2xml.py and/or xml2abc.py into this program's folder:\n"
+"\n"
+"{folder}\n"
+"\n"
+"Should you already have the files in a different location,\n"
+"enter their full path into the ini file in the same folder.\n"
+"\n"
+"If you are running Windows, make sure that Python is installed\n"
+"and that the path to Python is in your PATH environment variable.\n"
+"Alternatively, use abc2xml.exe and xml2abc.exe files instead."
+msgstr ""
+" INSTALLATION\n"
+" ============\n"
+"Copier abc2xml.py et/ou xml2abc.py dans le répertoire du programme:\n"
+"\n"
+"{folder}\n"
+"\n"
+"Si vous aves déjà ces outils installés dans un chemin différent,\n"
+"Entrez leur chemin absolu dans le fichier ini dans ce répertoire.\n"
+"\n"
+"Si vous utilisez Windows, assurez-vous que Python est installé\n"
+"et que son chemin d'accès est dans votre variable d'environnement PATH.\n"
+"Autrement vous pouvez utiliser abc2xml.exe et xm2abc.exe à la place."
+
+#: abc2xmlGUI.py:76
+msgid ""
+" INSTRUCTIONS\n"
+" ============\n"
+"1. Paste abc/XML or select file using button 'Open'.\n"
+"2. Change abc/XML as desired and/or select part of it.\n"
+"   Changed abc/XML can be saved using button 'Save'.\n"
+"3. Convert using button 'Convert'."
+msgstr ""
+" INSTRUCTIONS \n"
+" ============\n"
+"1. Copier du texte abc/XML ou sélectionner un fichier avec le Bouton "
+"'Ouvrir'.\n"
+"2. Modifier le texte abc/XML ou sélectionner une partie si besoin.\n"
+"   L'abc/XML changé peut être enregistré en utilisant le bouton "
+"'Enregistrer'.\n"
+"3. Convertir en utilisant le Bouton 'Convertir'."
+
+#: abc2xmlGUI.py:127
+msgid "score line-break"
+msgstr "retour à la ligne dans la partition"
+
+#: abc2xmlGUI.py:171
+msgid "Open"
+msgstr "Ouvrir"
+
+#: abc2xmlGUI.py:172
+msgid "Save"
+msgstr "Enregistrer"
+
+#: abc2xmlGUI.py:173
+msgid "Convert"
+msgstr "Convertir"
+
+#: abc2xmlGUI.py:192
+msgid ""
+"This function needs abc2xml.\n"
+"Copy file into abc2xmlGUI folder\n"
+"or enter path into abc2xmlGUI.ini."
+msgstr ""
+"Cette fonction a besoin de abc2xml.\n"
+"Copier le programme dans le répertoire abc2xmlGUI\n"
+"ou entrez son chemin d'accès dans le fichier abc2xmlGUI.ini."
+
+#: abc2xmlGUI.py:227 abc2xmlGUI.py:281
+msgid "Select file"
+msgstr "Sélectionner fichier"
+
+#: abc2xmlGUI.py:244
+msgid ""
+"Python not found!\n"
+"Please check your installation and\n"
+"environment variables."
+msgstr ""
+"Python non trouvé !\n"
+"Veuillez vérifier son installation et\n"
+"les variables d'environnement."
+
+#: abc2xmlGUI.py:319
+msgid "No abc or XML to convert."
+msgstr "Pas de données abc ou XML à convertir."
+
+#: abc2xmlGUI.py:352
+#, fuzzy
+#| msgid ""
+#| "This function needs xml2abc.\n"
+#| "Copy file into abc2xmlGUI folder\n"
+#| "or enter path into abc2xmlGUI.ini."
+msgid ""
+"This function needs xml2abc.\n"
+"Copy file into abc2xml GUI folder\n"
+"or enter path into abc2xmlGUI.ini."
+msgstr ""
+"Cette fonction a besoin de xml2abc.\n"
+"Copier le programme dans le répertoire abc2xmlGUI\n"
+"ou entrez son chemin d'accès dans le fichier abc2xmlGUI.ini."
