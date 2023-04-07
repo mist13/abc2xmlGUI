@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2023-03-23 10:41+0100\n"
 "PO-Revision-Date: 2023-03-23 10:44+0100\n"
-"Last-Translator: \n"
+"Last-Translator: Celestino Gomes\n"
 "Language-Team: \n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "Todos os arquivos"
 
 #: abc2xmlGUI.py:61
 msgid "This program needs abc2xml and/or xml2abc from wim.vree.org to work."
-msgstr "Este programa precisa do abc2xml e/ou xml2abc de wim.vree.org para funcionar."
+msgstr "Este programa precisa do abc2xml e/ou xml2abc de wim.vree.org."
 
 #: abc2xmlGUI.py:63
 msgid ""
@@ -43,7 +43,7 @@ msgstr ""
 " ==========\n"
 "Copie abc2xml.py e/ou xml2abc.py para a pasta deste programa:\n"
 "\n"
-"{pasta}\n"
+"{folder}\n"
 "\n"
 "Se você já tiver os arquivos em um local diferente,\n"
 "digite o caminho completo no arquivo ini na mesma pasta.\n"
@@ -65,12 +65,12 @@ msgstr ""
 " ==========\n"
 "1. Cole abc/XML ou selecione o arquivo usando o botão 'Abrir'.\n"
 "2. Altere abc/XML conforme desejado e/ou selecione parte dele.\n"
-"Abc/XML alterado pode ser salvo usando o botão 'Salvar'.\n"
+"   Abc/XML alterado pode ser salvo usando o botão 'Salvar'.\n"
 "3. Converta usando o botão 'Converter'."
 
 #: abc2xmlGUI.py:127
-msgid "quebra de linha de pontuação"
-msgstr "line nua scóir"
+msgid "score line-break"
+msgstr "quebra de linha de pontuação"
 
 #: abc2xmlGUI.py:171
 msgid "Open"
