@@ -11,14 +11,19 @@ On Windows both the Python and exe versions can be used.
 Python has to be in the PATH environment variable.
 
 ## Translations
-abc2xml GUI speaks English, French, German and Irish.  
+abc2xml GUI speaks English, French, German, Irish and Portuguese.  
 Thanks to Batt O'Connor for his help with the Irish.  
-Thanks to Benoît Rouits for the French translation.  
+Thanks to Benoît Rouits for the French translation and Celestino Gomes for the Portuguese one.  
 If you can provide translations into other languages, please be in touch.
 
 ## Further Information
 For more detailed info visit [blechtrottel.net](http://blechtrottel.net/en/abc2xmlgui.html)
 
 ## Version History
+1.1  
+Exe version  
+Icon file  
+Portuguese translation.
+
 1.0  
-Initial release (March 2023).
+Initial release.
