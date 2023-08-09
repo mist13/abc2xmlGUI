@@ -20,6 +20,13 @@ If you can provide translations into other languages, please be in touch.
 For more detailed info visit [blechtrottel.net](http://blechtrottel.net/en/abc2xmlgui.html)
 
 ## Version History
+1.2  
+Input and output directories remembered  
+Part of tune can be selected for conversion  
+UTF-8 handling improved  
+Detection of converters improved  
+Other minor changes
+
 1.1  
 Exe version  
 Icon file  
