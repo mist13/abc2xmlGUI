@@ -30,7 +30,6 @@ class abc2xmlGUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("abc2xml GUI")
-        #self.root.geometry("800x520")
         self.root['bg'] = '#4681b3'
         icon64 = '''iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9
 kT1Iw0AcxV9TpaVUHCwo4pChOlkQFXGUKhbBQmkrtOpgcukXNGlIUlwcBdeCgx+LVQcXZ10dXAVB
@@ -65,6 +64,8 @@ v2pvEcEaEewV5SAg3WM7cET6aXO6Qz2cvMzV562kzLUl53dNcKzpGro2h2FuRdfmrKRhYBToB+4D
         self.pathAbc2Xml = abc2xmlpath
         self.lang = ''
         self.messages = 'on'
+        self.inDir = ''
+        self.outDir = ''
 
         self.collectFiles()
         self.setI18N()
@@ -86,7 +87,7 @@ enter their full path into the ini file in the same folder.
 
 If you are running Windows, make sure that Python is installed
 and that the path to Python is in your PATH environment variable.
-Alternatively, use abc2xml.exe and xml2abc.exe files instead.""").format(folder=self.pathGUI)
+Alternatively, use abc2xml.exe and xml2abc.exe files instead.""").format(folder=self.pathExe)
 
         self.infoAbcText = _(""" INSTRUCTIONS
  ============
@@ -110,7 +111,7 @@ Alternatively, use abc2xml.exe and xml2abc.exe files instead.""").format(folder=
         self.textLabel.pack(side=tk.LEFT, anchor=tk.NW)
         self.textLabel.configure(state="disabled")
 
-        self.versionText = tk.Label(self.labelframe, borderwidth=0, bg=self.root['bg'], font=('Helvetica', 12, 'bold'), fg='#ffdb00', text="V 1.1")
+        self.versionText = tk.Label(self.labelframe, borderwidth=0, bg=self.root['bg'], font=('Helvetica', 12, 'bold'), fg='#ffdb00', text="V 1.2")
         self.versionText.pack(side=tk.RIGHT, anchor=tk.NE)
 
         self.labelframe.pack(padx=20, pady=12, fill='both', expand=1)
@@ -129,7 +130,7 @@ Alternatively, use abc2xml.exe and xml2abc.exe files instead.""").format(folder=
         #self.textboxframe.pack_propagate(False)
         self.textboxframe.pack(padx=20, fill='both', expand=1)
         self.abcText = tk.Text(self.textboxframe, borderwidth=0, highlightthickness=0, font='TkFixedFont')
-        self.abcText.pack(padx=5, pady=5, fill='both', expand=1)
+        self.abcText.pack(padx=10, pady=10, fill='both', expand=1)
         self.abcText.insert('1.0', "\n" + self.infoAbcText)
         self.checkPaths()
 
@@ -138,13 +139,17 @@ Alternatively, use abc2xml.exe and xml2abc.exe files instead.""").format(folder=
         self.bottomframe.rowconfigure(1, weight=1)
         
         self.scoreLineBreak = tk.StringVar()
-        self.lbCheckBox = tk.Checkbutton(self.bottomframe,
-                                        text=" " + _("score line-break") + " = $",
-                                        highlightthickness=0,
+        self.lbCheckBox = tk.Checkbutton(self.bottomframe, text="", highlightthickness=0,
                                         variable=self.scoreLineBreak, onvalue="", offvalue="-b",
-                                        bg=self.root['bg'], fg='#ffdb00', font=('Helvetica', 11, 'bold'))
+                                        bg=self.root['bg'], activebackground=self.root['bg'],
+                                        fg='black', activeforeground='black',
+                                        font=('Helvetica', 11, 'bold'))
         self.lbCheckBox.grid(row=0, columnspan=2, column=0, sticky=tk.W, padx=0, pady=(5,5))
         self.lbCheckBox.deselect()
+        self.lbLabel = tk.Label(self.bottomframe, borderwidth=0,
+                                  bg=self.root['bg'], font=('Helvetica', 11, 'bold'), fg='#ffdb00',
+                                  text=" " + _("score line-break") + " = $")
+        self.lbLabel.grid(row=0, column=0, columnspan=2, sticky=tk.NW, padx=20, pady=(8,0))
 
         btLogo64 = '''iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9
 kT1Iw0AcxV9TpaVUHCwo4pChOlkQFXGUKhbBQmkrtOpgcukXNGlIUlwcBdeCgx+LVQcXZ10dXAVB
@@ -195,16 +200,21 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
     def abc2xml(self):
         if (self.pathAbc2Xml != ''):
             if self.pathAbc2Xml == 'import': # If imported run as module, else start process
-                xml_docs = abc2xml.getXmlDocs (self.txt, skip = 0, num = 1, rOpt = False, bOpt = False, fOpt = False)
-                out = abc2xml.fixDoctype (xml_docs [0])
+                xml_docs = abc2xml.getXmlDocs(self.txt, skip=0, num=1, rOpt=False, bOpt=False, fOpt=False)
+                out = abc2xml.fixDoctype(xml_docs[0])
                 msg = abc2xml.getInfo()
             else:
                 cmdList = self.prepCmdList(self.pathAbc2Xml)
-                proc = subprocess.Popen(cmdList, universal_newlines=True,
-                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                out, msg = proc.communicate(self.txt)
+                #proc = subprocess.Popen(cmdList, universal_newlines=True,
+                #                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                #out, msg = proc.communicate(self.txt)
+                proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE)
+                out, msg = proc.communicate(self.txt.encode('utf-8'))
+                out = out.decode('utf-8').replace("\r\n", "\n")
+                msg = msg.decode('utf-8').replace("\r\n", "\n")
             self.saveFile(out)
-            if self.messages == 'on':
+            if self.messages == 'on' and self.filename != "":
                 self.wShowMessage('abc2xml', msg)
         else:
             infotext = _("This function needs abc2xml.\nCopy file into abc2xmlGUI folder\nor enter path into abc2xmlGUI.ini.")
@@ -216,7 +226,7 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
             self.abcText.delete('1.0', tk.END)
             if (self.pathAbc2Xml == '' and self.pathXml2Abc == ''): # Instructions if no converters
                 self.abcText.insert('1.0', "\n" + self.installAbcText)
-            else:              
+            else:
                 self.abcText.insert('1.0', "\n" + self.infoAbcText)
 
 
@@ -226,11 +236,18 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
             if c in dirFiles:
                 if 'abc2xml' in c and self.pathAbc2Xml == '':
                     self.pathAbc2Xml = self.pathGUI + '/' + c
-                elif self.pathXml2Abc == '':
+                elif 'xml2abc' in c and self.pathXml2Abc == '':
                     self.pathXml2Abc = self.pathGUI + '/' + c
                     break
-
         self.readIniFile() # Check ini for language and missing converter paths
+
+
+    def getInput(self): # Get either selected or all input
+        try:
+            self.txt = self.abcText.selection_get()
+        except Exception:
+            self.txt = self.abcText.get('1.0', tk.END)
+        self.txt = self.txt.strip()
 
 
     def getLocalPath(self, path): # Remove "file://" from paths and third "/" from paths in Windows
@@ -242,11 +259,16 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
 
 
     def openFile(self):
-        self.fl =  filedialog.askopenfile(mode = 'r', initialdir = self.pathExe, title = _("Select file"), filetypes = (("abc","*.abc *.txt"),("XML","*.mxl *.musicxml *.xml"),(self.allFiles,"*.*")))
-        if self.fl is not None:
-            text = self.fl.read()
+        if (self.inDir == "") or (not os.path.isdir(self.inDir)):
+            self.inDir = self.pathExe
+        filename = filedialog.askopenfilename(initialdir=self.inDir, title=_("Select file"), filetypes=self.fileTypes)
+        if filename != "":
+            with open(filename, 'r', encoding='utf-8') as self.fl:
+                text = self.fl.read()
             self.abcText.delete('1.0', tk.END)
             self.abcText.insert(tk.END, text)
+            
+            self.writeIniFile('in', filename)
 
 
     # Prepare paths, command and parameters for running converters 
@@ -256,7 +278,7 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
         if '.py' in path:
             python = "python" + self.whatPython()
             if python != 'python not found':
-                cmdList = [python, "-X utf8"]
+                cmdList = [python, "-X utf-8"]
             else:
                 infotext = _("Python not found!\nPlease check your installation and\nenvironment variables.")
                 self.userInfo('showerror', infotext)
@@ -274,50 +296,62 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
 
     def readIniFile(self):
         if os.path.isfile(self.pathExe + '/abc2xmlGUI.ini'):
-            ini = configparser.ConfigParser()
-            ini.read(self.pathExe + '/abc2xmlGUI.ini')
+            self.ini = configparser.ConfigParser()
+            self.ini.read(self.pathExe + '/abc2xmlGUI.ini')
 
-            self.lang = ini['Language']['lang']
+            self.lang = self.ini['Language']['lang']
 
             if (self.pathAbc2Xml == ''):
-                iniabc2xml = ini['Converters']['abc2xml']
+                iniabc2xml = self.ini['Converters']['abc2xml']
                 if 'abc2xml.' in iniabc2xml:
                     self.pathAbc2Xml = self.getLocalPath(iniabc2xml.strip())
                         
             if (self.pathXml2Abc == ''):
-                inixml2abc = ini['Converters']['xml2abc']
+                inixml2abc = self.ini['Converters']['xml2abc']
                 if 'xml2abc.' in inixml2abc:
                     self.pathXml2Abc = self.getLocalPath(inixml2abc.strip())
+            
+            self.inDir = self.ini['Directories']['in'].strip()
+            self.outDir = self.ini['Directories']['out'].strip()
 
-            inimessages = ini['Converters']['messages']
+            inimessages = self.ini['Converters']['messages']
             if ('off' in inimessages) or ('0' in inimessages) or ('no' in inimessages):
                 self.messages = 'off'
 
+
     def saveFile(self, content):
         ifile = ''
-        idir = self.pathExe
-        if hasattr(self, 'fl') and self.fl is not None:
+        idir = ''
+        #if self.fl and self.fl != '':
+        if hasattr(self, 'fl') and self.fl != '':
             filepart = self.fl.name.split('/')[-1]
-            idir = self.fl.name.replace('/' + filepart, '')
+            if (self.outDir == 'in') or (self.outDir == ''):
+                if self.inDir == '':
+                    idir = self.pathExe
+                else:
+                    idir = self.fl.name.replace('/' + filepart, '')
+            else:
+                idir = self.outDir
             ifile = filepart.split('.')[0]
         if content.startswith('<?xml'):
             outFiles = self.fileTypesX
-            if ifile != '':
+            if ifile != "":
                 ifile += ".xml"
         else:
             outFiles = self.fileTypes
-            if ifile != '':
+            if ifile != "":
                 ifile += ".abc"
-        filename = filedialog.asksaveasfile(initialfile = ifile, initialdir = idir, title = _("Select file"), filetypes = outFiles)
-        if filename is not None:
-            filename.write(content)
+        self.filename = filedialog.asksaveasfilename(initialfile=ifile, initialdir=idir, title=_("Select file"), filetypes=outFiles)
+        if self.filename != "":
+            with open(self.filename, 'w', encoding='utf8') as fl:
+                fl.write(content)
+
+            if self.outDir != 'in':
+                self.writeIniFile('out', self.filename)
 
 
     def saveTextBox(self):
-        try:
-            self.txt = self.abcText.selection_get()
-        except Exception:
-            self.txt = self.abcText.get('1.0', tk.END)
+        self.getInput()
         self.saveFile(self.txt)
 
 
@@ -329,7 +363,7 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
                 windll = ctypes.windll.kernel32
                 self.lang = locale.windows_locale[windll.GetUserDefaultUILanguage()]
         pathLocale = os.path.join(self.pathGUI, 'locale')
-        try:        
+        try:
             l_translation = gettext.translation('abc2xmlGUI', localedir=pathLocale, languages=[self.lang])
         except FileNotFoundError:
             l_translation = gettext.translation('abc2xmlGUI', localedir=pathLocale, languages=['en'])
@@ -337,12 +371,12 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
 
 
     def startConversion(self): # Look for input and select appropriate converter
-        self.txt = self.abcText.get('1.0', tk.END)
-        self.txt = self.txt.strip()
+        self.getInput()
+
         if (self.txt != "" and
             self.txt != self.installAbcText.strip() and
-            self.txt != self.infoAbcText.strip()): # Check if abc or xml
-            if self.txt.startswith('<?xml'):
+            self.txt != self.infoAbcText.strip()):
+            if self.txt.startswith('<?xml'): # Check if xml or abc
                 self.xml2abc()
             else:
                 self.abc2xml()
@@ -366,6 +400,16 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
             except FileNotFoundError:
                 if (i == 1):
                     return " not found"
+
+
+    def writeIniFile(self, inout, filename):
+        if os.path.isfile(self.pathExe + '/abc2xmlGUI.ini'):
+            if os.path.dirname(filename) == self.getLocalPath(self.pathExe):
+                self.ini['Directories'][inout] = ""
+            else:
+                self.ini['Directories'][inout] = os.path.dirname(filename)
+            with open(self.pathExe + '/abc2xmlGUI.ini', 'w', encoding='utf-8') as fl:
+                self.ini.write(fl)
 
 
     def wShowMessage(self, src, infotext): # Show converter messages
@@ -393,11 +437,16 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
                 out, msg = xml2abc.vertaal(self.txt, x=lb)
             else:
                 cmdList = self.prepCmdList(self.pathXml2Abc)
-                proc = subprocess.Popen(cmdList, universal_newlines=True,
-                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                out, msg = proc.communicate(self.txt)
+                #proc = subprocess.Popen(cmdList, universal_newlines=True,
+                #                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                #out, msg = proc.communicate(self.txt)
+                proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE)
+                out, msg = proc.communicate(self.txt.encode('utf-8'))
+                out = out.decode('utf-8').replace("\r\n", "\n")
+                msg = msg.decode('utf-8').replace("\r\n", "\n")
             self.saveFile(out)
-            if self.messages == 'on':
+            if self.messages == 'on' and self.filename != "":
                 self.wShowMessage('xml2abc', msg)
         else:
             infotext = _("This function needs xml2abc.\nCopy file into abc2xml GUI folder\nor enter path into abc2xmlGUI.ini.")
