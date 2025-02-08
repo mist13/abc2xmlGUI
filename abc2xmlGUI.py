@@ -111,7 +111,7 @@ Alternatively, use abc2xml.exe and xml2abc.exe files instead.""").format(folder=
         self.textLabel.pack(side=tk.LEFT, anchor=tk.NW)
         self.textLabel.configure(state="disabled")
 
-        self.versionText = tk.Label(self.labelframe, borderwidth=0, bg=self.root['bg'], font=('Helvetica', 12, 'bold'), fg='#ffdb00', text="V 1.2")
+        self.versionText = tk.Label(self.labelframe, borderwidth=0, bg=self.root['bg'], font=('Helvetica', 12, 'bold'), fg='#ffdb00', text="V 1.3")
         self.versionText.pack(side=tk.RIGHT, anchor=tk.NE)
 
         self.labelframe.pack(padx=20, pady=12, fill='both', expand=1)
@@ -205,16 +205,24 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
                 msg = abc2xml.getInfo()
             else:
                 cmdList = self.prepCmdList(self.pathAbc2Xml)
-                #proc = subprocess.Popen(cmdList, universal_newlines=True,
-                #                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                #out, msg = proc.communicate(self.txt)
-                proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE)
+                if (os.name == "nt"):
+                    suinfo = subprocess.STARTUPINFO()
+                    suinfo.dwFlags = 1
+                    suinfo.wShowWindow = 0
+                    proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                            stderr=subprocess.PIPE, startupinfo=suinfo)
+                else:
+                    proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                            stderr=subprocess.PIPE)
                 out, msg = proc.communicate(self.txt.encode('utf-8'))
-                out = out.decode('utf-8').replace("\r\n", "\n")
+                try:
+                    out = out.decode('utf-8').replace("\r\n", "\n")
+                except UnicodeDecodeError:
+                    out = out.decode('latin-1').replace("\r\n", "\n")
                 msg = msg.decode('utf-8').replace("\r\n", "\n")
             self.saveFile(out)
             if self.messages == 'on' and self.filename != "":
+                msg = msg.replace(". ", ".\n")
                 self.wShowMessage('abc2xml', msg)
         else:
             infotext = _("This function needs abc2xml.\nCopy file into abc2xmlGUI folder\nor enter path into abc2xmlGUI.ini.")
@@ -231,13 +239,19 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
 
 
     def collectFiles(self): # Check for converters in GUI directory
-        dirFiles = os.listdir(self.pathGUI)
+        if '\\Temp\\' in str(self.pathGUI):  # If exe version in Windows
+            self.folder = self.pathExe
+        else:
+            self.folder = self.pathGUI
+        #self.userInfo('showerror', "Exe: " + self.pathExe + "\nGUI: " + self.pathGUI + "\nFOLDER: " + self.folder) #####    
+        dirFiles = os.listdir(self.folder)
+
         for c in ['abc2xml.py', 'abc2xml.exe', 'xml2abc.py', 'xml2abc.exe']:
             if c in dirFiles:
                 if 'abc2xml' in c and self.pathAbc2Xml == '':
-                    self.pathAbc2Xml = self.pathGUI + '/' + c
+                    self.pathAbc2Xml = self.folder + '/' + c
                 elif 'xml2abc' in c and self.pathXml2Abc == '':
-                    self.pathXml2Abc = self.pathGUI + '/' + c
+                    self.pathXml2Abc = self.folder + '/' + c
                     break
         self.readIniFile() # Check ini for language and missing converter paths
 
@@ -260,7 +274,7 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
 
     def openFile(self):
         if (self.inDir == "") or (not os.path.isdir(self.inDir)):
-            self.inDir = self.pathExe
+            self.inDir = self.folder
         filename = filedialog.askopenfilename(initialdir=self.inDir, title=_("Select file"), filetypes=self.fileTypes)
         if filename != "":
             with open(filename, 'r', encoding='utf-8') as self.fl:
@@ -295,12 +309,13 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
 
 
     def readIniFile(self):
-        if os.path.isfile(self.pathExe + '/abc2xmlGUI.ini'):
+        #if os.path.isfile(self.pathExe + '/abc2xmlGUI.ini'):
+        if os.path.isfile(self.folder + '/abc2xmlGUI.ini'):
             self.ini = configparser.ConfigParser()
-            self.ini.read(self.pathExe + '/abc2xmlGUI.ini')
+            #self.ini.read(self.pathExe + '/abc2xmlGUI.ini')
+            self.ini.read(self.folder + '/abc2xmlGUI.ini')
 
             self.lang = self.ini['Language']['lang']
-
             if (self.pathAbc2Xml == ''):
                 iniabc2xml = self.ini['Converters']['abc2xml']
                 if 'abc2xml.' in iniabc2xml:
@@ -327,7 +342,7 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
             filepart = self.fl.name.split('/')[-1]
             if (self.outDir == 'in') or (self.outDir == ''):
                 if self.inDir == '':
-                    idir = self.pathExe
+                    idir = self.folder
                 else:
                     idir = self.fl.name.replace('/' + filepart, '')
             else:
@@ -358,7 +373,7 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
     def setI18N(self): # Set Language, ini setting overrides system language 
         if self.lang == '': # if no language in ini
             if os.name == 'posix':
-                self.lang = os.getenv('LANG')
+                self.lang = locale.getlocale()[0]
             else:
                 windll = ctypes.windll.kernel32
                 self.lang = locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -437,16 +452,24 @@ JrlcjkKhkGxyXCu+72+XSqV66juJzb4Nw+Fw5y/6itAbDV2yWAAAAABJRU5ErkJggg=='''
                 out, msg = xml2abc.vertaal(self.txt, x=lb)
             else:
                 cmdList = self.prepCmdList(self.pathXml2Abc)
-                #proc = subprocess.Popen(cmdList, universal_newlines=True,
-                #                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                #out, msg = proc.communicate(self.txt)
-                proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE)
+                if (os.name == "nt"):
+                    suinfo = subprocess.STARTUPINFO()
+                    suinfo.dwFlags = 1
+                    suinfo.wShowWindow = 0
+                    proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                            stderr=subprocess.PIPE, startupinfo=suinfo)                
+                else:
+                    proc = subprocess.Popen(cmdList, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                            stderr=subprocess.PIPE)
                 out, msg = proc.communicate(self.txt.encode('utf-8'))
-                out = out.decode('utf-8').replace("\r\n", "\n")
+                try:
+                    out = out.decode('utf-8').replace("\r\n", "\n")
+                except UnicodeDecodeError:
+                    out = out.decode('latin-1').replace("\r\n", "\n")
                 msg = msg.decode('utf-8').replace("\r\n", "\n")
             self.saveFile(out)
             if self.messages == 'on' and self.filename != "":
+                msg = msg.replace(". ", ".\n")
                 self.wShowMessage('xml2abc', msg)
         else:
             infotext = _("This function needs xml2abc.\nCopy file into abc2xml GUI folder\nor enter path into abc2xmlGUI.ini.")
