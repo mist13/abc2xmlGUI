@@ -20,6 +20,12 @@ If you can provide translations into other languages, please be in touch.
 For more detailed info visit [blechtrottel.net](http://blechtrottel.net/en/abc2xmlgui.html)
 
 ## Version History
+1.3  
+Exe now finds converters in same folder  
+Better detection of system locale  
+Better handling of source files  
+Better display of converter and Python messages
+
 1.2  
 Input and output directories remembered  
 Part of tune can be selected for conversion  
